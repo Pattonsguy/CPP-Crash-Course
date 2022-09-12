@@ -1,5 +1,8 @@
 //Relevent Libraries
 #include <iostream>
+#include <string>
+#include <map>
+using namespace std;
 
 //Program Goal: To take in a SIG code statement, and output it in plain english.
 /*Example:
@@ -7,10 +10,9 @@
 * Take 1-2 tablets twice a day with meals as needed for pain
 *
 * SIG Codes are typically broken up like this:
-* [amount per interval][interval] [misc time of day][other misc additons]
+* [amount per interval] [interval] [misc time of day] [other misc additons]
 *
 * Most prescription entry services used by pharmacies will automatically fill out portions related to entry such as "by mouth" based on the medicine selected.
-* We can assume that SIG codes will remain static. However using csv files to contain definitions could be useful should a modification be needed without having to update the app itself.
 *
 * References:
 * Doctor Jessica Roller
@@ -18,7 +20,7 @@
 
 /*
 * Project Strategy
-* 1. Create CSV files that contains SIG codes and their plain english equivalent. There should be a CSV file for each of the core parts of a SIG code statement.
+* 1. Create a map that will house each unique SIG code as the key with the plain english equivalent being mapped value.
 * 2. At startup, have the program will read off these files and store them in a data structure.
 * 3. The program will recieve a SIG statement from the user (command line for now).
 * 4. The program will tokenize the provided string. Will throw an error if the resulting tokens to not match the expected structure.
@@ -27,10 +29,51 @@
 *
 */
 
+//initialize methods
+map<string, string> mapBuilder();
+void printMap(map<string, string>);
+
 int main()
 {
-    std::cout << "Hello World!\n";
+    //initialize important variables
+    string sigInput;
+    //An array of string to house the SIG statement tokens, statements that I have seen are usually no longer than 5ish tokens
+    string brokenUpInput[10];
+    //A map data structure that will use the SIG codes as keys and the plain english equivalent as the mapped value
+    map<string, string> SIGList = mapBuilder();
+
+
+
+
+    while (true) {
+        //Prompt the user for a SIG statement
+        cout << "Please enter your SIG statement. Please ensure there is a space between each part.\n";
+        cin >> sigInput;
+        cout << "Received statement: " << sigInput;
+
+        //Loop to break down the statement into an array of individual tokens.
+
+
+
+    }//end while
+
 
     //close the program
     return 0;
+}//end main
+
+//A function meant to construct the map and return it to main
+map<string, string> mapBuilder() {
+    map<string, string> temp;
+    //A testing example
+    temp["BID"] = "twice a day";
+    //TODO find a method to automate importing SIG codes.
+
+    return temp;
+}//end mapBuilder
+
+//A function to print out the contents of a map in a neat way for testing purposes
+void printMap(map<string, string>) {
+    //TODO
+    return;
 }
