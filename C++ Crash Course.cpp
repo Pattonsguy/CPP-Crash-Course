@@ -7,6 +7,8 @@ using namespace std;
 //Use cerr for the standard C++ error IO stream
 #define DEBUGMODE true
 #define MAXSIGTOKENS 10
+#define MAXSIGCHARS 50
+//Note: _CRT_SECURE_NO_WARNINGS has been applied to the preprocessor definitions to allow for strtok usage
 
 //Program Goal: To take in a SIG code statement, and output it in plain english.
 /*Example:
@@ -44,37 +46,36 @@ int main()
         cerr << "\nDEBUG: Starting in main\n";
     #endif
     //initialize important variables
-    char sigInput[] = "";
+    char sigInput[MAXSIGCHARS];
     //An array of string to house the SIG statement tokens, statements that I have seen are usually no longer than 5ish tokens. This will be adjusted after some research.
     string brokenUpInput[MAXSIGTOKENS];
     //A map data structure that will use the SIG codes as keys and the plain english equivalent as the mapped value
     map<string, string> SIGList = mapBuilder();
     //Context parameter for strtok_s, a pointer to help keep track of what string is read and where on the string is read next.
-    char *inputContext = NULL;
+    //char *inputContext = NULL;
 
 
-    //Main loop of the program
-    while (true) {
-        //Prompt the user for a SIG statement
-        cout << "Please enter your SIG statement. Please ensure there is a space between each part and that all caps are used.\n";
-        cin >> sigInput;
-        cout << "Received statement: " << sigInput;
+    //Prompt the user for a SIG statement
+    cout << "Please enter your SIG statement. Please ensure there is a space between each part and that all caps are used.\n";
+    cin.getline(sigInput, MAXSIGCHARS);
+    cout << "Received statement: " << sigInput;
+    //TODO input filtering of bad characters
 
-        //Loop to break down the statement into an array of individual tokens.
-        brokenUpInput[0] = strtok_s(sigInput, " ", &inputContext);
-        int iteration = 1;
-        while (sigInput != NULL) {
-            brokenUpInput[iteration] = strtok_s(NULL, " ", &inputContext);
-            iteration++;
-        }//end while
-
-        //If in debug mode, print out all tokens recieved
-        #ifdef DEBUGMODE
-            printTokens(brokenUpInput);
-        #endif
-
+    
+    //Loop to break down the statement into an array of individual tokens.
+    int iteration = 0;
+    char *next = strtok(sigInput, " ");
+    //iterate through the string until the current token is empty or null
+    while (next != NULL) {
+        brokenUpInput[iteration] = next;
+        next = strtok(NULL, " ");
+        iteration++;
     }//end while
 
+    //If in debug mode, print out all tokens recieved
+    #ifdef DEBUGMODE
+        printTokens(brokenUpInput);
+    #endif
 
     //close the program
     return 0;
