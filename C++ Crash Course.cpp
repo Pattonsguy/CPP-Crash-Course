@@ -22,6 +22,7 @@ using namespace std;
 *
 * References:
 * Doctor Jessica Roller
+* https://pharmacytechniciantoday.com/pharmacy-abbreviations-sig-codes/
 */
 
 /*
@@ -77,7 +78,32 @@ int main()
         printTokens(brokenUpInput);
     #endif
 
-    //close the program
+    //Concatinate the equivalent english versions of SIG code tokens onto a final string for printout
+    string prepOutput = "";
+    //Map iterator
+    auto it = SIGList.begin();
+    for (int i = 0; brokenUpInput[i].empty() == false; i++) {
+        //find the location of the key in the map. Will return a pointer to the end of the map if a result is not found.
+        it = SIGList.find(brokenUpInput[i]);
+        if(it != SIGList.end()) {
+            //arrow operator gives access parts of the map
+            //first is the, second is the value
+            #ifdef DEBUGMODE
+            cout << "\nDEBUG: Key value: " << it->first << " | Value: " << it->second;
+            #endif
+            prepOutput.append(it->second);
+            prepOutput.append(" ");
+
+        }//end if
+        else
+        {
+            cout << "WARNING: Invalid SIG code given";
+        }//end else
+
+    }//end for
+
+    //close the program, note the the final version will need to return the string at the end in the app.
+    cout << "\nFinal output: " << prepOutput;
     return 0;
 }//end main
 
@@ -87,9 +113,27 @@ map<string, string> mapBuilder() {
         cerr << "\nDEBUG: Starting in mapBuilder\n";
     #endif
     map<string, string> temp;
-    //A testing example
+    //TODO find a better way to import codes, scraping?
+    
+    //Interval codes
     temp["BID"] = "twice a day";
-    //TODO find a method to automate importing SIG codes.
+    temp["TID"] = "three times a day";
+
+    //Drug Form, note that most pharmacy systems implement these automatically
+    temp["SUPP"] = "suppository";
+    temp["TAB"] = "tablet";
+    temp["CAPS"] = "capsule";
+
+    //Route
+    temp["PO"] = "by mouth";
+    temp["PR"] = "rectally";
+
+    //Time of day
+    temp["HS"] = "at bedtime";
+
+    //Optional additions
+    temp["PRN"] = "as needed";
+    temp["UD"] = "as directed";
 
     return temp;
 }//end mapBuilder
